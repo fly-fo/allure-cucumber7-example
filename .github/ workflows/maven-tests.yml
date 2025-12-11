@@ -1,13 +1,13 @@
-name: Maven CI
+name: Maven CI with Allure
 
 on:
   workflow_dispatch:
     inputs:
       ALLURE_JOB_RUN_ID:
-        description: "Inner parameter for Allure TestOps"
+        description: "Allure TestOps service parameter. Leave blank."
         required: false
       ALLURE_USERNAME:
-        description: "Inner parameter for Allure TestOps"
+        description: "Allure TestOps service parameter. Leave blank."
         required: false
 
 env:
@@ -24,8 +24,8 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          distribution: "zulu"
-          java-version: "17"  
+          distribution: "temurin"
+          java-version: "17"
           cache: "maven"
 
       - name: Set up AllureCTL
@@ -35,8 +35,7 @@ jobs:
           allure-token: ${{ secrets.ALLURE_TOKEN }}
           allure-project-id: 4601
 
-      - name: Run Tests with AllureCTL
+      - name: Run tests with Maven under AllureCTL
         run: allurectl watch -- mvn clean test
         env:
           ALLURE_RESULTS: target/allure-results
-
